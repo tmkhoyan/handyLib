@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [ "$1" = "mount" ]
+then
+    google-drive-ocamlfuse ~/googledrive
+else
+    fusermount -u ~/googledrive
+fi

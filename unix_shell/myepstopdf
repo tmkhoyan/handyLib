@@ -1,0 +1,33 @@
+#!/bin/sh 
+
+
+flname=""
+outname="out.pdf"
+
+# #two arguments, no arg, 1 arg
+if [ "$#" -eq 2 ]; then
+	flname=$1
+	outname=$2
+	epstopdf "${flname}" "${outname}"
+elif [ "$#" -eq 1 ]; then
+	flname=$1
+	epstopdf "${flname}"
+else
+	flname=$1
+	outname=$2
+	if [ "$#" -eq 3 ] && [ "$3" = "--min" ]; then
+		#statements
+		# crop
+		epstopdf "${flname}" "${outname}"
+		pdfcrop "${outname}" "${outname}"
+		echo "Cropped file ${flname}"	
+	else
+		echo "Usage: "${0##*/}" [input] [output] (optional)-[--min]\nTry again "
+		exit 1
+	fi
+fi
+
+# #carry out command
+
+
+echo "Document ${outname} successfully exported"

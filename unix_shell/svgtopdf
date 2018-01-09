@@ -1,0 +1,30 @@
+#!/bin/sh 
+
+
+flname=""
+outname="out.pdf"
+
+# #two arguments, no arg, 1 arg
+if [ "$#" -eq 2 ]; then
+	flname=$1
+	outname=$2
+elif [ "$#" -eq 1 ]; then
+	flname=$1
+else
+	flname=$1
+	outname=$2
+	if [ "$#" -eq 3 ] && [ "$3" = "--min" ]; then
+		#statements
+		# crop
+		echo "Cropped file ${flname}"
+		pdfcrop "${outname}" "${outname}"
+	else
+		echo "Usage: "${0##*/}" [input] [output] (optional)-[--min]\nTry again "
+		exit 1
+	fi
+fi
+
+# #carry out command
+inkscape "${flname}" --export-area-drawing --without-gui --export-pdf="${outname}"
+
+echo "Document ${outname} successfully exported"
