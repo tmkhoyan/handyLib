@@ -4,10 +4,16 @@ if [ "$#" -eq 2 ]; then
 # provide relative paths
 	INPUT_DIR=$1 	# input dir
 	MIRROR_DIR=$2  # mirror dir
+	MIRROR_DIR_=$MIRROR_DIR # stripped path
 elif [ "$#" -eq 3 ] && [ "$3" = "--abs" ]; then
 # provide absolute paths
+	INPUT_DIR=$1 	# input dir
+	MIRROR_DIR=$2  # mirror dir
+	MIRROR_DIR_=$MIRROR_DIR #stripped path 
+
 	INPUT_DIR=$(pwd)/$INPUT_DIR 	# input dir
 	MIRROR_DIR=$(pwd)/$MIRROR_DIR  # mirror dir
+
 else
 	echo $'"Usage: "${0##*/}" [src_dir] [dst_dir] (optional)-[--abs] \n. note - Absolute option will create full path structure. \n Try again "'
 	exit 1
@@ -19,7 +25,7 @@ fi
 [[ -d $MIRROR_DIR ]] || mkdir -p $MIRROR_DIR || exit 1
 
 # cd $MIRROR_DIR
-find "$INPUT_DIR" -type d -printf "$MIRROR_DIR%p\0" | sort -z |xargs -0 -L 1000 mkdir -p
-find "$INPUT_DIR" -type f -printf "$MIRROR_DIR%p\0" | xargs -0 -L 1000 touch
+find "$INPUT_DIR" -type d -printf "$MIRROR_DIR_%p\0" | sort -z |xargs -0 -L 1000 mkdir -p
+find "$INPUT_DIR" -type f -printf "$MIRROR_DIR_%p\0" | xargs -0 -L 1000 touch
 
 echo '0byte File/Folder structure created from src - "$INPUT_DIR" to dst - "$MIRROR_DIR"'
